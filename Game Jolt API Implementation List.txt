@@ -1,0 +1,28 @@
+Game Jolt API Implementation List:
+
+> Components
+
+-Users
+Fetch (x)
+Auth (x)
+
+-Sessions
+Open 
+Ping 
+Close 
+
+-Trophies
+Fetch 
+Add Achieved  (x)
+
+-Scores
+Fetch 
+Add 
+Tables 
+
+-Data Store
+Fetch 
+Set 
+Update 
+Remove 
+Get Keys 
