@@ -1,6 +1,6 @@
 # Game Jolt Trophy for Python 3.x
 # by viniciusepiplon - vncastanheira@gmail.com
-# version 0.1.3 beta
+# version 0.1.4 beta
 
 # This is a general Python module for manipulating user data and
 # trophies (achievments) on GameJolt.
@@ -73,6 +73,9 @@ class GameJoltTrophy(object):
 		except Exception:
 			return False
 
+	# This module is a work in progress.
+	# It still returns 'The signature you entered for the request is invalid.' for an unknow reason
+	# Gonna fix it later (and discover why)
 	def fetchTrophy(self, achieved=None, trophy=None):
 		URL = 'http://gamejolt.com/api/game/v1/trophies/?format=json&'+\
 		'game_id='+str(self.game_id)+'&'+'username='+str(self.username)+'&'+'user_token='+str(self.user_token)
@@ -142,9 +145,3 @@ class GameJoltTrophy(object):
 		except URLError:
 			# Any URLError is considered a unsucessful authentication
 			return False
-
-		
-connection = GameJoltTrophy('viniciusepiplon', '4d551f', '11254', 'bc38e5418741cbd796217f97e86523b0 ')
-#print(connection.setTrophy('1154'))
-#print(connection.authenticateUser())
-#print(connection.fetchTrophy())
