@@ -12,13 +12,13 @@ Ping
 Close 
 
 -Trophies
-Fetch 
+Fetch (?)
 Add Achieved  (x)
 
 -Scores
-Fetch 
-Add 
-Tables 
+Fetch (x) 
+Add (x)
+Tables (x)
 
 -Data Store
 Fetch 

@@ -1,6 +1,6 @@
 # Game Jolt Trophy for Python 3.x
 # by viniciusepiplon - vncastanheira@gmail.com
-# version 0.1.4 beta
+# version 0.3.7 beta
 
 # This is a general Python module for manipulating user data and
 # trophies (achievments) on GameJolt.
@@ -38,6 +38,8 @@ class GameJoltTrophy(object):
 		# Each URL request to GameJolt needs to generate a new signature.
 		self.signature = None
 
+#====== TOOLS ======#
+
 	# Used for changing users, setting and/or fixing authentications
 	def changeUsername(self, username):
 		self.username = username
@@ -57,57 +59,8 @@ class GameJoltTrophy(object):
 		url += '&'+'signature='+str(self.signature)
 		return url
 
-	# Sets a winning trophy for the user.
-	# If the parameters are valid, returns True.
-	# Otherwise, it returns False.
-	# If an request error occurs, also returns False.
-	def setTrophy(self, trophy_id):
-		URL = 'http://gamejolt.com/api/game/v1/trophies/add-achieved/?'+\
-		'game_id='+str(self.game_id)+'&'+'user_token='+str(self.user_token)+'&'+'username='+str(self.username)+\
-		'&'+'trophy_id='+str(trophy_id)
-		URL = self.setSignature(URL)
-
-		try:
-			response = urllib.request.urlopen(URL)
-			return True
-		except Exception:
-			return False
-
-	# This module is a work in progress.
-	# It still returns 'The signature you entered for the request is invalid.' for an unknow reason
-	# Gonna fix it later (and discover why)
-	def fetchTrophy(self, achieved=None, trophy=None):
-		URL = 'http://gamejolt.com/api/game/v1/trophies/?format=json&'+\
-		'game_id='+str(self.game_id)+'&'+'username='+str(self.username)+'&'+'user_token='+str(self.user_token)
-		if achieved != None:
-			URL += '&achieved='
-			if achieved == True: URL += 'true&'
-			if achieved == False: URL += 'false&'
-		else:
-			if trophy != None:
-				if type(trophy) == int:
-					URL += '&trophy_id='+str(trophy)+'&'
-				elif type(trophy) == list:
-					miniurl = '&trophy_id='
-					for t in trophy:
-						miniurl += str(t)+','
-					miniurl = miniurl[:1]
-					print(miniurl)
-					URL += miniurl
-				else:
-					raise 'Invalid type for trophy: must be int or list.'
-
-		URL = self.setSignature(URL)
-		print(URL)
-		response = urllib.request.urlopen(URL)
-		output = response.read().decode('utf8')
-		dictionary = json.loads(output)['response']
-		# Returns the parameters in a dictionary format
-		# Then, the user defines how it will use the values received
-		# Dictionary keys and values are strings
-		return dictionary
-
-
+#====== USERS ======#
+		
 	# Fetches the infos of a user as a dictionary type.
 	# ATTENTION: it returns the information for a single user and the
 	# first of the list.
@@ -145,3 +98,110 @@ class GameJoltTrophy(object):
 		except URLError:
 			# Any URLError is considered a unsucessful authentication
 			return False
+
+#====== TROPHIES ======#
+
+	# This module is a work in progress.
+	# It still returns 'The signature you entered for the request is invalid.' for an unknow reason
+	# Gonna fix it later (and discover why)
+	def fetchTrophy(self, achieved=None, trophy=None):
+		URL = 'http://gamejolt.com/api/game/v1/trophies/?format=json&'+\
+		'game_id='+str(self.game_id)+'&'+'username='+str(self.username)+'&'+'user_token='+str(self.user_token)
+		if achieved != None:
+			URL += '&achieved='
+			if achieved == True: URL += 'true&'
+			if achieved == False: URL += 'false&'
+		else:
+			if trophy != None:
+				if type(trophy) == int:
+					URL += '&trophy_id='+str(trophy)+'&'
+				elif type(trophy) == list:
+					miniurl = '&trophy_id='
+					for t in trophy:
+						miniurl += str(t)+','
+					miniurl = miniurl[:1]
+					print(miniurl)
+					URL += miniurl
+				else:
+					raise 'Invalid type for trophy: must be int or list.'
+
+		URL = self.setSignature(URL)
+		print(URL)
+		response = urllib.request.urlopen(URL)
+		output = response.read().decode('utf8')
+		dictionary = json.loads(output)['response']
+		# Returns the parameters in a dictionary format
+		# Then, the user defines how it will use the values received
+		# Dictionary keys and values are strings
+		return dictionary
+
+	# Sets a winning trophy for the user.
+	# If the parameters are valid, returns True.
+	# Otherwise, it returns False.
+	# If an request error occurs, also returns False.
+	def addAchieved(self, trophy_id):
+		URL = 'http://gamejolt.com/api/game/v1/trophies/add-achieved/?'+\
+		'game_id='+str(self.game_id)+'&'+'user_token='+str(self.user_token)+'&'+'username='+str(self.username)+\
+		'&'+'trophy_id='+str(trophy_id)
+		URL = self.setSignature(URL)
+
+		try:
+			response = urllib.request.urlopen(URL)
+			return True
+		except Exception:
+			return False
+
+
+#====== SCORES ======#
+
+	def fetchScores(self, limit=10, table_id=None, user_info_only=False, ):
+		URL = 'http://gamejolt.com/api/game/v1/scores/?format=json&game_id='+str(self.game_id)
+		if user_info_only:
+			URL += '&username='+str(self.username)+'&user_token='+str(self.user_token)
+		# ID of the score table
+		if table_id:
+			URL += '&table_id='+str(table_id)
+		# Maximum number of scores should be 100 according with the GJAPI
+		if limit > 100:
+			limit = 100
+		URL += '&limit='+str(limit)
+
+		URL = self.setSignature(URL)
+		print(URL)
+		response = urllib.request.urlopen(URL)
+		output = response.read().decode('utf8')
+		dictionary = json.loads(output)['response']
+		# Returns the parameters in a dictionary format
+		# Then, the user defines how it will use the values received
+		# Dictionary keys and values are strings
+		return dictionary
+
+	# score: string with no blank spaces
+	def addScores(self, score, sort, table_id=None, extra_data='', guest=False, guestname=''):
+		URL = 'http://gamejolt.com/api/game/v1/scores/add/?format=json&game_id='+str(self.game_id)+\
+		'&score='+str(score)+'&sort='+str(sort)
+		if not guest:
+			URL += '&username='+str(self.username)+'&user_token='+str(self.user_token)
+		else:
+			URL += '&guestname='+str(guestname)
+		if extra_data:
+			URL += '&extra_data='+extra_data
+		if table_id:
+			URL += '&table_id='+str(table_id)
+
+		URL = self.setSignature(URL)
+		print(URL)
+		response = urllib.request.urlopen(URL)
+		output = response.read().decode('utf8')
+		dictionary = json.loads(output)['response']
+		return dictionary
+
+	# Returns a list of high score tables for a game.
+	def scoreTable(self):
+		URL = 'http://gamejolt.com/api/game/v1/scores/tables/?format=json&game_id='+str(self.game_id)
+		URL = self.setSignature(URL)
+		print(URL)
+		response = urllib.request.urlopen(URL)
+		output = response.read().decode('utf8')
+		dictionary = json.loads(output)['response']
+		return dictionary
