@@ -1,6 +1,6 @@
 # Game Jolt Trophy for Python 3.x
 # by viniciusepiplon - vncastanheira@gmail.com
-# version 0.3.7 beta
+# version 0.4 beta
 
 # This is a general Python module for manipulating user data and
 # trophies (achievments) on GameJolt.
@@ -101,16 +101,14 @@ class GameJoltTrophy(object):
 
 #====== TROPHIES ======#
 
-	# This module is a work in progress.
-	# It still returns 'The signature you entered for the request is invalid.' for an unknow reason
-	# Gonna fix it later (and discover why)
+	# Fetch your trophies! Yay!
 	def fetchTrophy(self, achieved=None, trophy=None):
 		URL = 'http://gamejolt.com/api/game/v1/trophies/?format=json&'+\
 		'game_id='+str(self.game_id)+'&'+'username='+str(self.username)+'&'+'user_token='+str(self.user_token)
 		if achieved != None:
 			URL += '&achieved='
-			if achieved == True: URL += 'true&'
-			if achieved == False: URL += 'false&'
+			if achieved == True: URL += 'true'
+			if achieved == False: URL += 'false'
 		else:
 			if trophy != None:
 				if type(trophy) == int:
@@ -150,7 +148,6 @@ class GameJoltTrophy(object):
 			return True
 		except Exception:
 			return False
-
 
 #====== SCORES ======#
 
@@ -201,6 +198,19 @@ class GameJoltTrophy(object):
 		URL = 'http://gamejolt.com/api/game/v1/scores/tables/?format=json&game_id='+str(self.game_id)
 		URL = self.setSignature(URL)
 		print(URL)
+		response = urllib.request.urlopen(URL)
+		output = response.read().decode('utf8')
+		dictionary = json.loads(output)['response']
+		return dictionary
+
+#====== DATA STORE ======#
+
+	# Untested. I don't know what key means and how I handle this, so I just setted the basic stuff.
+	def dataFetch(self, key, user_info_only=False):
+		URL = 'http://gamejolt.com/api/game/v1/data-store/?format=json&game_id='+str(self.game_id)+'&key='+str(key)
+		if user_info_only:
+			URL += '&username='+str(self.username)+'&user_token='+str(self.user_token)
+		URL = self.setSignature(URL)
 		response = urllib.request.urlopen(URL)
 		output = response.read().decode('utf8')
 		dictionary = json.loads(output)['response']

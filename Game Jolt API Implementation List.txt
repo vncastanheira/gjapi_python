@@ -12,7 +12,7 @@ Ping
 Close 
 
 -Trophies
-Fetch (?)
+Fetch (x)
 Add Achieved  (x)
 
 -Scores
