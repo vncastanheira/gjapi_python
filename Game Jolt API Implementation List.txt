@@ -7,9 +7,9 @@ Fetch (x)
 Auth (x)
 
 -Sessions
-Open 
-Ping 
-Close 
+Open (x)
+Ping (x)
+Close (x)
 
 -Trophies
 Fetch (x)

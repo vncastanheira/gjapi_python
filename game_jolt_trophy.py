@@ -1,6 +1,6 @@
 # Game Jolt Trophy for Python 3.x
 # by viniciusepiplon - vncastanheira@gmail.com
-# version 0.4 beta
+# version 0.6 beta
 
 # This is a general Python module for manipulating user data and
 # trophies (achievments) on GameJolt.
@@ -206,10 +206,43 @@ class GameJoltTrophy(object):
 #====== DATA STORE ======#
 
 	# Untested. I don't know what key means and how I handle this, so I just setted the basic stuff.
+	# I don't know how to work with this either. Gonna research, ask, and then bring information.
 	def dataFetch(self, key, user_info_only=False):
 		URL = 'http://gamejolt.com/api/game/v1/data-store/?format=json&game_id='+str(self.game_id)+'&key='+str(key)
 		if user_info_only:
 			URL += '&username='+str(self.username)+'&user_token='+str(self.user_token)
+		URL = self.setSignature(URL)
+		response = urllib.request.urlopen(URL)
+		output = response.read().decode('utf8')
+		dictionary = json.loads(output)['response']
+		return dictionary
+
+#====== SESSIONS ======#
+
+	def openSession(self):
+		URL = 'http://gamejolt.com/api/game/v1/sessions/open/?format=json&game_id='+str(self.game_id)+\
+		'&username='+str(self.username)+'&user_token='+str(self.user_token)
+		URL = self.setSignature(URL)
+		response = urllib.request.urlopen(URL)
+		output = response.read().decode('utf8')
+		dictionary = json.loads(output)['response']
+		return dictionary
+
+	def closeSession(self):
+		URL = 'http://gamejolt.com/api/game/v1/sessions/close/?format=json&game_id='+str(self.game_id)+\
+		'&username='+str(self.username)+'&user_token='+str(self.user_token)
+		URL = self.setSignature(URL)
+		response = urllib.request.urlopen(URL)
+		output = response.read().decode('utf8')
+		dictionary = json.loads(output)['response']
+		return dictionary
+
+	def pingSession(self, active=True):
+		URL = 'http://gamejolt.com/api/game/v1/sessions/ping/?format=json&game_id='+str(self.game_id)+\
+		'&username='+str(self.username)+'&user_token='+str(self.user_token)
+		if active: URL += '&status=active'
+		else:	URL += '&status=idle'
+
 		URL = self.setSignature(URL)
 		response = urllib.request.urlopen(URL)
 		output = response.read().decode('utf8')
