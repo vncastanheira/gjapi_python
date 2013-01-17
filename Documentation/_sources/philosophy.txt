@@ -1,0 +1,8 @@
+Module's Philosophy
+===================
+
+The philosophy of this module is to be general. And what do I mean by that?
+The Python interpreter bundle come with features and a Standart Library, so
+anyone using the same version have the same range of functionalities, if you
+consider a "clean" bundle with no additional intallations. So to maintain
+compatiblity and portability, I didn't use any outsider modules.

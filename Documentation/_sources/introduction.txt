@@ -1,0 +1,15 @@
+Introduction
+============
+
+After releasing my first game on Game Jolt's website, I wanted to test this
+cool API that could set achievments and lots of data to complement the user's
+experience. But since my intention was on developing using python due it's 
+simplicity as yet powerful language, the first thing that I searched was a 
+support for it and then I found none. From there, came my iniciative to write
+this module, not only for supporting my future game but to provide to the
+community something simple that could be re-used without modifications. Of
+course that, being an open-source code, anyone can change the lines.
+And if a feature is implemented and is in coercion with the module's purpose,
+I would like to include it on the official github repository, so everyone can
+enjoy it. And I hope that you could find it useful as well!
+Thanks!

@@ -1,0 +1,337 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>py_gjapi &mdash; gjapi_python 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gjapi_python 1.0 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">gjapi_python 1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for py_gjapi</h1><div class="highlight"><pre>
+<span class="c"># Game Jolt Trophy for Python</span>
+<span class="c"># by viniciusepiplon - vncastanheira@gmail.com</span>
+<span class="c"># version 1.0</span>
+<span class="c"># Python 3.x stable</span>
+<span class="c"># Python 2.7 unstable</span>
+
+<span class="c"># This is a general Python module for manipulating user data and</span>
+<span class="c"># trophies (achievments) on GameJolt.</span>
+<span class="c"># Website: www.gamejolt.com</span>
+
+<span class="c"># This program is free software: you can redistribute it and/or modify</span>
+<span class="c"># it under the terms of the GNU Lesser General Public License as published by</span>
+<span class="c"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c"># (at your option) any later version.</span>
+
+<span class="c"># This program is distributed in the hope that it will be useful,</span>
+<span class="c"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c"># GNU General Public License for more details.</span>
+<span class="c">#</span>
+<span class="c"># You should have received a copy of the GNU Lesser General Public License</span>
+<span class="c"># along with this program.  If not, see &lt;http://www.gnu.org/licenses/lgpl.txt&gt;.</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">hexversion</span> <span class="o">&gt;</span> <span class="mh">0x03000000</span><span class="p">:</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="kn">import</span> <span class="nn">urllib.request</span>
+	<span class="k">except</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">ImportError</span>
+<span class="k">else</span><span class="p">:</span>
+	<span class="k">try</span><span class="p">:</span>
+		<span class="kn">import</span> <span class="nn">urllib</span>
+	<span class="k">except</span><span class="p">:</span>
+		<span class="k">raise</span> <span class="ne">ImportError</span>
+
+
+
+<div class="viewcode-block" id="GameJoltTrophy"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy">[docs]</a><span class="k">class</span> <span class="nc">GameJoltTrophy</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	The Class constructors. </span>
+<span class="sd">	Username and user_token can be changed later, but the game id</span>
+<span class="sd">	and the private key must be defined first, as they won&#39;t change.</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">user_token</span><span class="p">,</span> <span class="n">game_id</span><span class="p">,</span> <span class="n">private_key</span><span class="p">):</span>
+		<span class="nb">super</span><span class="p">(</span><span class="n">GameJoltTrophy</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">user_token</span> <span class="o">=</span> <span class="n">user_token</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">game_id</span> <span class="o">=</span> <span class="n">game_id</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">private_key</span> <span class="o">=</span> <span class="n">private_key</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">URL</span> <span class="o">=</span> <span class="s">&#39;http://gamejolt.com/api/game/v1&#39;</span>
+
+		<span class="bp">self</span><span class="o">.</span><span class="n">nativeTraceback</span> <span class="o">=</span> <span class="bp">False</span>
+
+<span class="c">#====== TOOLS ======#</span>
+
+	<span class="c"># Used for changing users, setting and/or fixing authentications</span>
+<div class="viewcode-block" id="GameJoltTrophy.changeUsername"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.changeUsername">[docs]</a>	<span class="k">def</span> <span class="nf">changeUsername</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+	<span class="c"># Used for changing users tokens, setting and/or fixing authentications</span></div>
+<div class="viewcode-block" id="GameJoltTrophy.changeUserToken"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.changeUserToken">[docs]</a>	<span class="k">def</span> <span class="nf">changeUserToken</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_token</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">user_token</span> <span class="o">=</span> <span class="n">user_token</span>
+
+	<span class="c"># Generates a signature from the url and returns the same address, with</span>
+	<span class="c"># the signature added to it</span>
+	<span class="c"># All singatures are generated with md5, but can be modified below.</span>
+	<span class="c"># This is the only function that generates the signature, so changing the</span>
+	<span class="c"># encoding to SHA1 or other format will affect all URL requests.</span></div>
+<div class="viewcode-block" id="GameJoltTrophy.setSignatureAndgetJSONResponse"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.setSignatureAndgetJSONResponse">[docs]</a>	<span class="k">def</span> <span class="nf">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">URL</span><span class="p">):</span>
+		<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">hexversion</span> <span class="o">&gt;</span> <span class="mh">0x03000000</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">link</span> <span class="o">=</span> <span class="n">URL</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">private_key</span><span class="p">)</span>
+				<span class="n">link</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+				<span class="n">signature</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">link</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+				<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;signature=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+				<span class="n">response</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+				<span class="n">output</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span>
+				<span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">output</span><span class="p">)[</span><span class="s">&#39;response&#39;</span><span class="p">]</span>
+			<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span> 
+				<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">nativeTraceback</span><span class="p">:</span>
+					<span class="k">return</span> <span class="p">{</span><span class="s">&#39;success&#39;</span><span class="p">:</span> <span class="s">&#39;false&#39;</span><span class="p">,</span> <span class="s">&#39;message&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)}</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="k">raise</span> <span class="n">error</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">try</span><span class="p">:</span>
+				<span class="n">link</span> <span class="o">=</span> <span class="n">URL</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">private_key</span><span class="p">)</span>
+				<span class="n">link</span> <span class="o">=</span> <span class="n">link</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;ascii&#39;</span><span class="p">)</span>
+				<span class="n">signature</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">link</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+				<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;signature=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+				<span class="n">response</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+				<span class="n">output</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)</span>
+				<span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">output</span><span class="p">)[</span><span class="s">&#39;response&#39;</span><span class="p">]</span>
+			<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span> 
+				<span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">nativeTraceback</span><span class="p">:</span>
+					<span class="k">return</span> <span class="p">{</span><span class="s">&#39;success&#39;</span><span class="p">:</span> <span class="s">&#39;false&#39;</span><span class="p">,</span> <span class="s">&#39;message&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)}</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="k">raise</span> <span class="n">error</span>
+
+
+	<span class="c"># &#39;Value&#39; is a boolean argument </span></div>
+	<span class="k">def</span> <span class="nf">setNativeTraceback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">bool</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">nativeTraceback</span> <span class="o">=</span> <span class="n">value</span>
+		<span class="k">else</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">TypeError</span>
+
+<span class="c">#====== USERS ======#</span>
+		
+	<span class="c"># Fetches the infos of a user as a dictionary type.</span>
+	<span class="c"># ATTENTION: it returns the information for a single user and the first of the list.</span>
+	<span class="c"># Support for a list of users will be implemented later.</span>
+<div class="viewcode-block" id="GameJoltTrophy.fetchUserInfo"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.fetchUserInfo">[docs]</a>	<span class="k">def</span> <span class="nf">fetchUserInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/users/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+			
+	<span class="c"># Authenticate a user defined in the object variable.</span>
+	<span class="c"># The purpose of this method is to check if the user&#39;s credential (name and token) are valid</span>
+	<span class="c"># Then, you&#39;re safe to call the other methods</span></div>
+<div class="viewcode-block" id="GameJoltTrophy.authenticateUser"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.authenticateUser">[docs]</a>	<span class="k">def</span> <span class="nf">authenticateUser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/users/auth/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span>\
+		<span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span>
+		<span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)[</span><span class="s">&#39;success&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="s">&#39;true&#39;</span>
+
+
+<span class="c">#====== TROPHIES ======#</span>
+
+	<span class="c"># Fetch your trophies! Yay!</span>
+	<span class="c"># The &#39;trophy&#39; argument receives a list of one or more ID of trophies to be</span>
+	<span class="c"># returned. It ignores the &#39;achieved&#39; argument, so call the function like:</span>
+	<span class="c"># fetchTrophy(None, [1,2,...]), where you pass the desired number between the</span>
+	<span class="c"># braces, separating each trophy ID with commas.</span>
+	<span class="c"># If &#39;achieved&#39; is:</span>
+	<span class="c">#	- set to true, only the achieved trophies will be returned</span>
+	<span class="c"># - set to false, only trophies that the user hasn&#39;t achieved yet will be returned</span>
+	<span class="c"># - set to None (no argument is passed), then all trophies will be retrieved</span></div>
+<div class="viewcode-block" id="GameJoltTrophy.fetchTrophy"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.fetchTrophy">[docs]</a>	<span class="k">def</span> <span class="nf">fetchTrophy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">achieved</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">trophy</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/trophies/?format=json&amp;&#39;</span><span class="o">+</span>\
+		<span class="s">&#39;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">achieved</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+			<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;achieved=&#39;</span>
+			<span class="k">if</span> <span class="n">achieved</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span> <span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;true&#39;</span>
+			<span class="k">if</span> <span class="n">achieved</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span> <span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;false&#39;</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="k">if</span> <span class="n">trophy</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span>
+				<span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">trophy</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+					<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;trophy_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">trophy</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;&#39;</span>
+				<span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">trophy</span><span class="p">)</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+					<span class="n">miniurl</span> <span class="o">=</span> <span class="s">&#39;&amp;trophy_id=&#39;</span>
+					<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">trophy</span><span class="p">:</span>
+						<span class="n">miniurl</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;,&#39;</span>
+					<span class="n">miniurl</span> <span class="o">=</span> <span class="n">miniurl</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>
+					<span class="n">URL</span> <span class="o">+=</span> <span class="n">miniurl</span>
+				<span class="k">else</span><span class="p">:</span>
+					<span class="k">raise</span> <span class="s">&#39;Invalid type for trophy: must be int or list.&#39;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+
+	<span class="c"># Sets a winning trophy for the user.</span>
+	<span class="c"># If the parameters are valid, returns True. Otherwise, it returns False.</span></div>
+<div class="viewcode-block" id="GameJoltTrophy.addAchieved"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.addAchieved">[docs]</a>	<span class="k">def</span> <span class="nf">addAchieved</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trophy_id</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/trophies/add-achieved/?&#39;</span><span class="o">+</span>\
+		<span class="s">&#39;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span>\
+		<span class="s">&#39;&amp;&#39;</span><span class="o">+</span><span class="s">&#39;trophy_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">trophy_id</span><span class="p">)</span>
+		<span class="k">try</span><span class="p">:</span>
+			<span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)[</span><span class="s">&#39;success&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="s">&#39;true&#39;</span>
+		<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span> 
+			<span class="k">return</span> <span class="p">{</span><span class="s">&#39;success&#39;</span><span class="p">:</span> <span class="s">&#39;false&#39;</span><span class="p">,</span> <span class="s">&#39;message&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)}</span>
+
+<span class="c">#====== SCORES ======#</span>
+	</div>
+<div class="viewcode-block" id="GameJoltTrophy.fetchScores"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.fetchScores">[docs]</a>	<span class="k">def</span> <span class="nf">fetchScores</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">table_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">user_info_only</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/scores/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">user_info_only</span><span class="p">:</span>
+			<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span>
+		<span class="c"># ID of the score table</span>
+		<span class="k">if</span> <span class="n">table_id</span><span class="p">:</span>
+			<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;table_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">table_id</span><span class="p">)</span>
+		<span class="c"># Maximum number of scores should be 100 according with the GJAPI</span>
+		<span class="k">if</span> <span class="n">limit</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">:</span>
+			<span class="n">limit</span> <span class="o">=</span> <span class="mi">100</span>
+		<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;limit=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+
+	<span class="c"># score: string with no blank spaces</span></div>
+<div class="viewcode-block" id="GameJoltTrophy.addScores"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.addScores">[docs]</a>	<span class="k">def</span> <span class="nf">addScores</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">score</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span> <span class="n">table_id</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">extra_data</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">guest</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">guestname</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/scores/add/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span>\
+		<span class="s">&#39;&amp;score=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">score</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;sort=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">sort</span><span class="p">)</span>
+		<span class="k">if</span> <span class="ow">not</span> <span class="n">guest</span><span class="p">:</span>
+			<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span>
+		<span class="k">else</span><span class="p">:</span>
+			<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;guestname=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">guestname</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">extra_data</span><span class="p">:</span>
+			<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;extra_data=&#39;</span><span class="o">+</span><span class="n">extra_data</span>
+		<span class="k">if</span> <span class="n">table_id</span><span class="p">:</span>
+			<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;table_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">table_id</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+
+	<span class="c"># Returns a list of high score tables for a game.</span></div>
+<div class="viewcode-block" id="GameJoltTrophy.scoreTable"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.scoreTable">[docs]</a>	<span class="k">def</span> <span class="nf">scoreTable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/scores/tables/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+
+<span class="c">#====== SESSIONS ======#</span>
+</div>
+<div class="viewcode-block" id="GameJoltTrophy.openSession"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.openSession">[docs]</a>	<span class="k">def</span> <span class="nf">openSession</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/sessions/open/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span>\
+		<span class="s">&#39;&amp;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="GameJoltTrophy.closeSession"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.closeSession">[docs]</a>	<span class="k">def</span> <span class="nf">closeSession</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/sessions/close/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span>\
+		<span class="s">&#39;&amp;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="GameJoltTrophy.pingSession"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.pingSession">[docs]</a>	<span class="k">def</span> <span class="nf">pingSession</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">active</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/sessions/ping/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span>\
+		<span class="s">&#39;&amp;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">active</span><span class="p">:</span> <span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;status=active&#39;</span>
+		<span class="k">else</span><span class="p">:</span>	<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;status=idle&#39;</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+
+<span class="c">#====== DATA STORAGE ==#</span>
+	</div>
+<div class="viewcode-block" id="GameJoltTrophy.fetchData"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.fetchData">[docs]</a>	<span class="k">def</span> <span class="nf">fetchData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">user_info_only</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/data-store/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span>\
+		<span class="s">&#39;&amp;key=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">user_info_only</span><span class="p">:</span>
+			<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="GameJoltTrophy.storeData"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.storeData">[docs]</a>	<span class="k">def</span> <span class="nf">storeData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">user_info_only</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/data-store/set/?format=json&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span>\
+		<span class="s">&#39;&amp;key=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;data=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">user_info_only</span><span class="p">:</span>
+			<span class="n">URL</span> <span class="o">+=</span> <span class="s">&#39;&amp;username=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;user_token=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_token</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="GameJoltTrophy.removeData"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.removeData">[docs]</a>	<span class="k">def</span> <span class="nf">removeData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/data-store/remove/?format=json&#39;</span><span class="o">+</span><span class="s">&#39;&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span><span class="o">+</span><span class="s">&#39;&amp;key=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="GameJoltTrophy.getDataKeys"><a class="viewcode-back" href="../reference.html#py_gjapi.GameJoltTrophy.getDataKeys">[docs]</a>	<span class="k">def</span> <span class="nf">getDataKeys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="n">URL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">URL</span><span class="o">+</span><span class="s">&#39;/data-store/get-keys/?format=json&#39;</span><span class="o">+</span><span class="s">&#39;&amp;game_id=&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game_id</span><span class="p">)</span>
+		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">setSignatureAndgetJSONResponse</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">gjapi_python 1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Vinicius Castanheira.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+Known Issues and Bugs
+=====================
+
+Here is a list of issues known by me, to keep track of what problems is present
+on the API version.
+
+- The blankspace character
+	Some methods on the API requires that a string is passed as an argument. These arguments is for storing not only a single word, but an entire text, according to the wishes of the user. 
+	For the first release, it won't be supported this blank character. But if you want it anyways, you can write your text replacing the blank spaces by a '+' character. It will work just fine for the API and won't give you a signature error.
+	Sorry for this, it was bit of a rush to think on a good way to solve this. Youcan expect this being fixed even on the minor update of the module.

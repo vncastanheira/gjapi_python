@@ -1,0 +1,10 @@
+Behavior
+============
+
+This module provide a single Class named GameJoltTrophy. All API calls 
+necessary are included as methods of this class.
+I found it to be more simple than creating functions alone because the object 
+itself carries variables that are always reused. The 'URL' variable, for 
+exemple, are almost the same, varying only in the end. Trough this approach, 
+the code is smaller and easier to understand, incluiding being more easy
+to maintain.
