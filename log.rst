@@ -1,0 +1,10 @@
+Version Log
+============
+
+- Version 1.1
+	Fixed bug on guests in addScore
+
+- Version 1.0
+	First release.
+	Python 3.x suppor stable.
+	Python 2.7 support unstable.

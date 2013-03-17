@@ -1,6 +1,6 @@
 # Game Jolt Trophy for Python
 # by viniciusepiplon - vncastanheira@gmail.com
-# version 1.0
+# version 1.1
 # Python 3.x stable
 # Python 2.7 unstable
 
@@ -231,7 +231,7 @@ class GameJoltTrophy(object):
 		if not guest:
 			URL += '&username='+str(self.username)+'&user_token='+str(self.user_token)
 		else:
-			URL += '&guestname='+str(guestname)
+			URL += '&guest='+str(guestname)
 		if extra_data:
 			URL += '&extra_data='+extra_data
 		if table_id:
