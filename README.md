@@ -15,7 +15,7 @@ Website: www.gamejolt.com
 Documentation
 -------------
 
-- You can download the whole repository and open the *index.html* file on the **Documentation** folder
+- You can download the whole repository and open the **index.html** file on the **Documentation** folder
 - Or you can read the documentation on the repository's Wiki 
 
 -----------------
