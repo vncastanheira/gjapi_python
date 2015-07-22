@@ -15,8 +15,8 @@ Website: www.gamejolt.com
 Documentation
 -------------
 
-Make sure to read the documentation on index.html on the Documentation folder for 
-further information on how to use the API.
+- You can download the whole repository and open the *index.html* file on the **Documentation** folder
+- Or you can read the documentation on the repository's Wiki 
 
 -----------------
 Bugs and feedback
