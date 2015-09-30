@@ -8,7 +8,7 @@ version 1.1
 - Python 2.7 unstable
 
 This is a general Python module for manipulating user data and
-trophies (achievments) on GameJolt.
+trophies (achievements) on GameJolt.
 Website: www.gamejolt.com
 
 -------------
