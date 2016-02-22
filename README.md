@@ -11,6 +11,8 @@ This is a general Python module for manipulating user data and
 trophies (achievements) on GameJolt.
 Website: www.gamejolt.com
 
+#### This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
+
 -------------
 Documentation
 -------------
