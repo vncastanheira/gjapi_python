@@ -142,6 +142,7 @@ class GameJoltTrophy(object):
 		'&'+'user_token='+str(self.user_token)
 		return (self.setSignatureAndgetJSONResponse(URL)['success']) == 'true'
 
+	
 
 #====== TROPHIES ======#
 
@@ -303,6 +304,27 @@ class GameJoltTrophy(object):
 			URL += '&username='+str(self.username)+'&user_token='+str(self.user_token)
 		return self.setSignatureAndgetJSONResponse(URL)
 
+	def UpdateData(self, key, operation, value, user_info_only=False, return_data=False):
+		"""
+		Updates the data stored.
+		The *key* variable is the identification value for the particular data you
+		want to retrieve.
+		The *value* variable is the string or number to be operated.
+		The mathematic operations are add, subtract, multiply and divide. The string operations are append and prepend.
+		If you want to update data only for the user stored in the object, the last
+		argument is set to True.
+		Returns a boolean value or the resulting data: True if the data was updated with sucess, False 
+		otherwise; if you want to know the actual value of the updated data "return_data" is set to true.
+		"""
+		URL = self.URL+'/data-store/update/?format=json&game_id='+str(self.game_id)+\
+		'&key='+str(key)+'&operation='+operation+'&value'+str(value)
+		if user_info_only:
+			URL += '&username='+str(self.username)+'&user_token='+str(self.user_token)
+		if not return_data:
+			return (self.setSignatureAndgetJSONResponse(URL)['success']) == 'true'
+		if return_data:
+			return (self.setSignatureAndgetJSONResponse(URL)['data'])
+			
 	def storeData(self, key, data, user_info_only=False):
 		"""
 		Set a data to be stored.
