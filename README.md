@@ -13,6 +13,8 @@ Website: www.gamejolt.com
 
 #### This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License
 
+If you are looking for a compatible library for **Ren'Py**, take a look at [gjapi_renpy](https://gitlab.com/maxlefou/gjapi_renpy).
+
 -------------
 Documentation
 -------------
