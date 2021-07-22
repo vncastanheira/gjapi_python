@@ -1,7 +1,7 @@
 Game Jolt Trophy for Python
 ---------------------------------
 
-by vncastanheira@gmail.com
+by Vinícius Castanheira
 version 1.1
 
 - Python 3.x stable
